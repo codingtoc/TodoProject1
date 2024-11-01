@@ -1,1 +1,94 @@
-<template> todoList Component </template>
+<template>
+  <lightning-card title="Todo List">
+    <lightning-button-icon
+      icon-name="utility:add"
+      variant="brand"
+      alternative-text="Add"
+      title="Add"
+      slot="actions"
+      class="slds-m-right_xx-small"
+    ></lightning-button-icon>
+    <lightning-button-icon
+      icon-name="utility:sync"
+      variant="brand"
+      alternative-text="Refresh"
+      title="Refresh"
+      slot="actions"
+    ></lightning-button-icon>
+    <lightning-layout
+      class="slds-box slds-m-around_small"
+      vertical-align="center"
+      horizontal-align="spread"
+    >
+      <lightning-layout-item size="8"><b>Task1</b></lightning-layout-item>
+      <lightning-layout-item>
+        <lightning-button-icon
+          icon-name="utility:edit"
+          variant="brand"
+          alternative-text="Edit"
+          title="Edit"
+          class="slds-m-left_xx-small"
+        >
+        </lightning-button-icon>
+        <lightning-button-icon
+          icon-name="utility:delete"
+          variant="brand"
+          alternative-text="Delete"
+          title="Delete"
+          class="slds-m-left_xx-small"
+        >
+        </lightning-button-icon>
+      </lightning-layout-item>
+    </lightning-layout>
+    <lightning-layout
+      class="slds-box slds-m-around_small"
+      vertical-align="center"
+      horizontal-align="spread"
+    >
+      <lightning-layout-item size="8"><b>Task2</b></lightning-layout-item>
+      <lightning-layout-item>
+        <lightning-button-icon
+          icon-name="utility:edit"
+          variant="brand"
+          alternative-text="Edit"
+          title="Edit"
+          class="slds-m-left_xx-small"
+        >
+        </lightning-button-icon>
+        <lightning-button-icon
+          icon-name="utility:delete"
+          variant="brand"
+          alternative-text="Delete"
+          title="Delete"
+          class="slds-m-left_xx-small"
+        >
+        </lightning-button-icon>
+      </lightning-layout-item>
+    </lightning-layout>
+    <lightning-layout
+      class="slds-box slds-m-around_small"
+      vertical-align="center"
+      horizontal-align="spread"
+    >
+      <lightning-layout-item size="8"><b>Task3</b></lightning-layout-item>
+      <lightning-layout-item>
+        <lightning-button-icon
+          icon-name="utility:edit"
+          variant="brand"
+          alternative-text="Edit"
+          title="Edit"
+          class="slds-m-left_xx-small"
+        >
+        </lightning-button-icon>
+        <lightning-button-icon
+          icon-name="utility:delete"
+          variant="brand"
+          alternative-text="Delete"
+          title="Delete"
+          class="slds-m-left_xx-small"
+        >
+        </lightning-button-icon>
+      </lightning-layout-item>
+    </lightning-layout>
+  </lightning-card>
+</template>
