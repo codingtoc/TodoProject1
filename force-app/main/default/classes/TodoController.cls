@@ -10,8 +10,9 @@ public with sharing class TodoController {
         ORDER BY ActivityDate DESC NULLS LAST, CreatedDate DESC
       ];
     } catch (Exception e) {
-      throw new AuraHandledException(e.getMessage());
+      System.debug(e.getMessage());
     }
+    return null;
   }
 
   @AuraEnabled
@@ -31,8 +32,9 @@ public with sharing class TodoController {
       insert as user todo;
       return todo;
     } catch (Exception e) {
-      throw new AuraHandledException(e.getMessage());
+      System.debug(e.getMessage());
     }
+    return null;
   }
 
   @AuraEnabled
@@ -41,7 +43,19 @@ public with sharing class TodoController {
       update as user todo;
       return todo;
     } catch (Exception e) {
-      throw new AuraHandledException(e.getMessage());
+      System.debug(e.getMessage());
     }
+    return null;
+  }
+
+  @AuraEnabled
+  public static Boolean deleteTodo(Id recordId) {
+    try {
+      Database.delete(recordId, AccessLevel.USER_MODE);
+      return true;
+    } catch (Exception e) {
+      System.debug(e.getMessage());
+    }
+    return false;
   }
 }
