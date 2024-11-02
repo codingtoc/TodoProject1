@@ -2,6 +2,9 @@ import { LightningElement, track } from "lwc";
 import getTodos from "@salesforce/apex/TodoController.getTodos";
 import addTodo from "@salesforce/apex/TodoController.addTodo";
 import updateTodo from "@salesforce/apex/TodoController.updateTodo";
+import deleteTodo from "@salesforce/apex/TodoController.deleteTodo";
+import LightningConfirm from "lightning/confirm";
+
 export default class TodoList extends LightningElement {
   todos;
   isAddClicked = false;
@@ -100,6 +103,24 @@ export default class TodoList extends LightningElement {
       console.log(error);
     } finally {
       this.isEditClicked = false;
+    }
+  }
+
+  async handleDelete(event) {
+    this.recordId = event.target.dataset.recordId;
+    const result = await LightningConfirm.open({
+      message: "Are you sure you want to delete this todo?",
+      variant: "default", // headerless
+      label: "Delete Confirmation"
+    });
+
+    if (result) {
+      try {
+        let deleteResult = await deleteTodo({ recordId: this.recordId });
+        this.getTodoList();
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 }
