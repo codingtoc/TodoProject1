@@ -34,4 +34,14 @@ public with sharing class TodoController {
       throw new AuraHandledException(e.getMessage());
     }
   }
+
+  @AuraEnabled
+  public static Task updateTodo(Task todo) {
+    try {
+      update as user todo;
+      return todo;
+    } catch (Exception e) {
+      throw new AuraHandledException(e.getMessage());
+    }
+  }
 }
