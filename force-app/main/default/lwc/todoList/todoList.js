@@ -1,10 +1,12 @@
-import { LightningElement } from "lwc";
+import { LightningElement, track } from "lwc";
 import getTodos from "@salesforce/apex/TodoController.getTodos";
 import addTodo from "@salesforce/apex/TodoController.addTodo";
-
+import updateTodo from "@salesforce/apex/TodoController.updateTodo";
 export default class TodoList extends LightningElement {
   todos;
   isAddClicked = false;
+  isEditClicked = false;
+  recordId;
   subject;
   dueDate;
   isCompleted;
@@ -36,15 +38,15 @@ export default class TodoList extends LightningElement {
     this.isAddClicked = false;
   }
 
-  handleAddSubject(event) {
+  handleChangeSubject(event) {
     this.subject = event.target.value;
   }
 
-  handleAddDueDate(event) {
+  handleChangeDueDate(event) {
     this.dueDate = event.target.value;
   }
 
-  handleAddIsCompleted(event) {
+  handleChangeIsCompleted(event) {
     this.isCompleted = event.target.checked;
   }
 
@@ -64,6 +66,40 @@ export default class TodoList extends LightningElement {
       console.log(error);
     } finally {
       this.isAddClicked = false;
+    }
+  }
+
+  handleEdit(event) {
+    this.recordId = event.target.dataset.recordId;
+    this.subject = event.target.dataset.subject;
+    this.dueDate = event.target.dataset.dueDate;
+    this.isCompleted = event.target.dataset.isCompleted === "true";
+    this.isEditClicked = true;
+  }
+
+  handleEditCancel(event) {
+    this.isEditClicked = false;
+  }
+
+  async handleEditSave(event) {
+    if (this.subject.trim() === "") {
+      this.subject = "";
+      return;
+    }
+    try {
+      let todo = await updateTodo({
+        todo: {
+          Id: this.recordId,
+          Subject: this.subject,
+          ActivityDate: this.dueDate,
+          Status: this.isCompleted ? "Completed" : "Not Started"
+        }
+      });
+      this.getTodoList();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.isEditClicked = false;
     }
   }
 }

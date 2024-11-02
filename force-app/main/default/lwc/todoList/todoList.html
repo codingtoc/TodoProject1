@@ -41,6 +41,11 @@
             alternative-text="Edit"
             title="Edit"
             class="slds-m-left_xx-small"
+            onclick={handleEdit}
+            data-record-id={todo.Id}
+            data-subject={todo.Subject}
+            data-due-date={todo.ActivityDate}
+            data-is-completed={todo.IsCompleted}
           >
           </lightning-button-icon>
           <lightning-button-icon
@@ -88,17 +93,17 @@
             <lightning-input
               type="text"
               label="Subject"
-              onchange={handleAddSubject}
+              onchange={handleChangeSubject}
             ></lightning-input>
             <lightning-input
               type="date"
               label="Due Date"
-              onchange={handleAddDueDate}
+              onchange={handleChangeDueDate}
             ></lightning-input>
             <lightning-input
               type="checkbox"
               label="Is Completed"
-              onchange={handleAddIsCompleted}
+              onchange={handleChangeIsCompleted}
             ></lightning-input>
           </div>
           <div class="slds-modal__footer">
@@ -112,6 +117,82 @@
             <button
               class="slds-button slds-button_brand"
               onclick={handleAddSave}
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </section>
+      <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+    <template if:true={isEditClicked}>
+      <section
+        role="dialog"
+        tabindex="-1"
+        aria-modal="true"
+        aria-labelledby="modal-heading-01"
+        class="slds-modal slds-fade-in-open"
+      >
+        <div class="slds-modal__container">
+          <lightning-button-icon
+            icon-name="utility:close"
+            variant="bare-inverse"
+            alternative-text="Close"
+            title="Close"
+            class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+            onclick={handleEditCancel}
+          >
+          </lightning-button-icon>
+          <div class="slds-modal__header">
+            <h1
+              id="modal-heading-02"
+              class="slds-modal__title slds-hyphenate"
+              tabindex="-1"
+            >
+              Edit Todo
+            </h1>
+          </div>
+          <div
+            class="slds-modal__content slds-p-around_medium"
+            id="modal-content-id-2"
+          >
+            <lightning-input
+              type="text"
+              label="Record ID"
+              value={recordId}
+              readonly
+            >
+            </lightning-input>
+            <lightning-input
+              type="text"
+              label="Subject"
+              value={subject}
+              onchange={handleChangeSubject}
+            ></lightning-input>
+            <lightning-input
+              type="date"
+              label="Due Date"
+              value={dueDate}
+              onchange={handleChangeDueDate}
+            ></lightning-input>
+            <lightning-input
+              type="checkbox"
+              label="Is Completed"
+              checked={isCompleted}
+              onchange={handleChangeIsCompleted}
+            ></lightning-input>
+          </div>
+          <div class="slds-modal__footer">
+            <button
+              class="slds-button slds-button_neutral"
+              aria-label="Cancel and close"
+              onclick={handleEditCancel}
+            >
+              Cancel
+            </button>
+            <button
+              class="slds-button slds-button_brand"
+              onclick={handleEditSave}
             >
               Save
             </button>
