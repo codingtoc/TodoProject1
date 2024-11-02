@@ -13,8 +13,10 @@ export default class TodoList extends LightningElement {
   subject;
   dueDate;
   isCompleted;
+  isProcessing = false;
 
   connectedCallback() {
+    this.isProcessing = true;
     this.getTodoList();
   }
 
@@ -26,10 +28,13 @@ export default class TodoList extends LightningElement {
       });
     } catch (error) {
       console.log(error);
+    } finally {
+      this.isProcessing = false;
     }
   }
 
   handleRefresh(event) {
+    this.isProcessing = true;
     this.getTodoList();
   }
 
@@ -59,6 +64,7 @@ export default class TodoList extends LightningElement {
       return;
     }
     try {
+      this.isProcessing = true;
       let todo = await addTodo({
         subject: this.subject,
         activityDate: this.dueDate,
@@ -69,6 +75,7 @@ export default class TodoList extends LightningElement {
       console.log(error);
     } finally {
       this.isAddClicked = false;
+      this.isProcessing = false;
     }
   }
 
@@ -90,6 +97,7 @@ export default class TodoList extends LightningElement {
       return;
     }
     try {
+      this.isProcessing = true;
       let todo = await updateTodo({
         todo: {
           Id: this.recordId,
@@ -103,6 +111,7 @@ export default class TodoList extends LightningElement {
       console.log(error);
     } finally {
       this.isEditClicked = false;
+      this.isProcessing = false;
     }
   }
 
@@ -116,10 +125,13 @@ export default class TodoList extends LightningElement {
 
     if (result) {
       try {
+        this.isProcessing = true;
         let deleteResult = await deleteTodo({ recordId: this.recordId });
         this.getTodoList();
       } catch (error) {
         console.log(error);
+      } finally {
+        this.isProcessing = false;
       }
     }
   }

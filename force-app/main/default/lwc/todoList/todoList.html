@@ -203,5 +203,11 @@
       </section>
       <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
     </template>
+    <template if:true={isProcessing}>
+      <lightning-spinner
+        alternative-text="Loading"
+        size="medium"
+      ></lightning-spinner>
+    </template>
   </lightning-card>
 </template>
