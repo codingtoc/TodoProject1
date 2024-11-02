@@ -13,4 +13,25 @@ public with sharing class TodoController {
       throw new AuraHandledException(e.getMessage());
     }
   }
+
+  @AuraEnabled
+  public static Task addTodo(
+    String subject,
+    Date activityDate,
+    Boolean isCompleted
+  ) {
+    try {
+      Task todo = new Task(
+        Subject = subject,
+        ActivityDate = activityDate,
+        Status = isCompleted ? 'Completed' : 'Not Started',
+        Priority = 'Normal',
+        OwnerId = UserInfo.getUserId()
+      );
+      insert as user todo;
+      return todo;
+    } catch (Exception e) {
+      throw new AuraHandledException(e.getMessage());
+    }
+  }
 }
