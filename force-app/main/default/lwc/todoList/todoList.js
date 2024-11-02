@@ -1,8 +1,13 @@
 import { LightningElement } from "lwc";
 import getTodos from "@salesforce/apex/TodoController.getTodos";
+import addTodo from "@salesforce/apex/TodoController.addTodo";
 
 export default class TodoList extends LightningElement {
   todos;
+  isAddClicked = false;
+  subject;
+  dueDate;
+  isCompleted;
 
   connectedCallback() {
     this.getTodoList();
@@ -21,5 +26,44 @@ export default class TodoList extends LightningElement {
 
   handleRefresh(event) {
     this.getTodoList();
+  }
+
+  handleAdd(event) {
+    this.isAddClicked = true;
+  }
+
+  handleAddCancel(event) {
+    this.isAddClicked = false;
+  }
+
+  handleAddSubject(event) {
+    this.subject = event.target.value;
+  }
+
+  handleAddDueDate(event) {
+    this.dueDate = event.target.value;
+  }
+
+  handleAddIsCompleted(event) {
+    this.isCompleted = event.target.checked;
+  }
+
+  async handleAddSave(event) {
+    if (this.subject.trim() === "") {
+      this.subject = "";
+      return;
+    }
+    try {
+      let todo = await addTodo({
+        subject: this.subject,
+        activityDate: this.dueDate,
+        isCompleted: this.isCompleted
+      });
+      this.getTodoList();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.isAddClicked = false;
+    }
   }
 }
