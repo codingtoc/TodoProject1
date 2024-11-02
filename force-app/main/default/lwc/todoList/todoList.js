@@ -12,7 +12,7 @@ export default class TodoList extends LightningElement {
   recordId;
   subject;
   dueDate;
-  isCompleted;
+  isCompleted = false;
   isProcessing = false;
 
   connectedCallback() {
@@ -44,6 +44,7 @@ export default class TodoList extends LightningElement {
 
   handleAddCancel(event) {
     this.isAddClicked = false;
+    this.initTodo();
   }
 
   handleChangeSubject(event) {
@@ -76,6 +77,7 @@ export default class TodoList extends LightningElement {
     } finally {
       this.isAddClicked = false;
       this.isProcessing = false;
+      this.initTodo();
     }
   }
 
@@ -89,6 +91,7 @@ export default class TodoList extends LightningElement {
 
   handleEditCancel(event) {
     this.isEditClicked = false;
+    this.initTodo();
   }
 
   async handleEditSave(event) {
@@ -112,6 +115,7 @@ export default class TodoList extends LightningElement {
     } finally {
       this.isEditClicked = false;
       this.isProcessing = false;
+      this.initTodo();
     }
   }
 
@@ -132,7 +136,17 @@ export default class TodoList extends LightningElement {
         console.log(error);
       } finally {
         this.isProcessing = false;
+        this.initTodo();
       }
+    } else {
+      this.initTodo();
     }
+  }
+
+  initTodo() {
+    this.recordId = null;
+    this.subject = null;
+    this.dueDate = null;
+    this.isCompleted = false;
   }
 }
