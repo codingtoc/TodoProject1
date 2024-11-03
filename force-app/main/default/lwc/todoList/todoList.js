@@ -1,9 +1,10 @@
-import { LightningElement, track } from "lwc";
+import { LightningElement } from "lwc";
 import getTodos from "@salesforce/apex/TodoController.getTodos";
 import addTodo from "@salesforce/apex/TodoController.addTodo";
 import updateTodo from "@salesforce/apex/TodoController.updateTodo";
 import deleteTodo from "@salesforce/apex/TodoController.deleteTodo";
 import LightningConfirm from "lightning/confirm";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
 
 export default class TodoList extends LightningElement {
   todos;
@@ -36,6 +37,7 @@ export default class TodoList extends LightningElement {
   handleRefresh(event) {
     this.isProcessing = true;
     this.getTodoList();
+    this.showToast("Refresh Todo List", "Todo List is refreshed successfully.");
   }
 
   handleAdd(event) {
@@ -72,6 +74,7 @@ export default class TodoList extends LightningElement {
         isCompleted: this.isCompleted
       });
       this.getTodoList();
+      this.showToast("Add Todo", "Todo is inserted successfully.");
     } catch (error) {
       console.log(error);
     } finally {
@@ -110,6 +113,7 @@ export default class TodoList extends LightningElement {
         }
       });
       this.getTodoList();
+      this.showToast("Edit Todo", "Todo is updated successfully.");
     } catch (error) {
       console.log(error);
     } finally {
@@ -132,6 +136,7 @@ export default class TodoList extends LightningElement {
         this.isProcessing = true;
         let deleteResult = await deleteTodo({ recordId: this.recordId });
         this.getTodoList();
+        this.showToast("Delete Todo", "Todo is deleted successfully.");
       } catch (error) {
         console.log(error);
       } finally {
@@ -148,5 +153,13 @@ export default class TodoList extends LightningElement {
     this.subject = null;
     this.dueDate = null;
     this.isCompleted = false;
+  }
+
+  showToast(title, message) {
+    const event = new ShowToastEvent({
+      title: title,
+      message: message
+    });
+    this.dispatchEvent(event);
   }
 }
