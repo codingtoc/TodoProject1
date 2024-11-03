@@ -1,0 +1,40 @@
+<template>
+  <lightning-modal-header label={title}></lightning-modal-header>
+  <lightning-modal-body>
+    <template if:true={isEditClicked}>
+      <lightning-input
+        type="text"
+        label="Record ID"
+        value={todo.recordId}
+        readonly
+      >
+      </lightning-input>
+    </template>
+    <lightning-input
+      type="text"
+      label="Subject"
+      value={todo.subject}
+      onchange={handleChangeSubject}
+    ></lightning-input>
+    <lightning-input
+      type="date"
+      label="Due Date"
+      value={todo.dueDate}
+      onchange={handleChangeDueDate}
+    ></lightning-input>
+    <lightning-input
+      type="checkbox"
+      label="Is Completed"
+      checked={todo.isCompleted}
+      onchange={handleChangeIsCompleted}
+    ></lightning-input>
+  </lightning-modal-body>
+  <lightning-modal-footer>
+    <lightning-button
+      label="Cancel"
+      onclick={handleCancel}
+      class="slds-m-right_xx-small"
+    ></lightning-button>
+    <lightning-button label="Save" onclick={handleSave}></lightning-button>
+  </lightning-modal-footer>
+</template>

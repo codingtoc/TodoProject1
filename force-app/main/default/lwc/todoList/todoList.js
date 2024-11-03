@@ -5,11 +5,10 @@ import updateTodo from "@salesforce/apex/TodoController.updateTodo";
 import deleteTodo from "@salesforce/apex/TodoController.deleteTodo";
 import LightningConfirm from "lightning/confirm";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import ModalPopup from "c/modalPopup";
 
 export default class TodoList extends LightningElement {
   todos;
-  isAddClicked = false;
-  isEditClicked = false;
   recordId;
   subject;
   dueDate;
@@ -40,85 +39,63 @@ export default class TodoList extends LightningElement {
     this.showToast("Refresh Todo List", "Todo List is refreshed successfully.");
   }
 
-  handleAdd(event) {
-    this.isAddClicked = true;
-  }
-
-  handleAddCancel(event) {
-    this.isAddClicked = false;
-    this.initTodo();
-  }
-
-  handleChangeSubject(event) {
-    this.subject = event.target.value;
-  }
-
-  handleChangeDueDate(event) {
-    this.dueDate = event.target.value;
-  }
-
-  handleChangeIsCompleted(event) {
-    this.isCompleted = event.target.checked;
-  }
-
-  async handleAddSave(event) {
-    if (this.subject.trim() === "") {
-      this.subject = "";
-      return;
-    }
-    try {
-      this.isProcessing = true;
-      let todo = await addTodo({
-        subject: this.subject,
-        activityDate: this.dueDate,
-        isCompleted: this.isCompleted
-      });
-      this.getTodoList();
-      this.showToast("Add Todo", "Todo is inserted successfully.");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      this.isAddClicked = false;
-      this.isProcessing = false;
-      this.initTodo();
-    }
-  }
-
-  handleEdit(event) {
+  async handleModalPopup(event) {
     this.recordId = event.target.dataset.recordId;
     this.subject = event.target.dataset.subject;
     this.dueDate = event.target.dataset.dueDate;
     this.isCompleted = event.target.dataset.isCompleted === "true";
-    this.isEditClicked = true;
-  }
 
-  handleEditCancel(event) {
-    this.isEditClicked = false;
-    this.initTodo();
-  }
+    const result = await ModalPopup.open({
+      todo: {
+        recordId: this.recordId,
+        subject: this.subject,
+        dueDate: this.dueDate,
+        isCompleted: this.isCompleted
+      }
+    });
 
-  async handleEditSave(event) {
-    if (this.subject.trim() === "") {
-      this.subject = "";
-      return;
-    }
-    try {
-      this.isProcessing = true;
-      let todo = await updateTodo({
-        todo: {
-          Id: this.recordId,
-          Subject: this.subject,
-          ActivityDate: this.dueDate,
-          Status: this.isCompleted ? "Completed" : "Not Started"
+    if (result) {
+      this.recordId = result.recordId;
+      this.subject = result.subject;
+      this.dueDate = result.dueDate;
+      this.isCompleted = result.isCompleted;
+      if (this.recordId) {
+        try {
+          this.isProcessing = true;
+          let todo = await updateTodo({
+            todo: {
+              Id: this.recordId,
+              Subject: this.subject,
+              ActivityDate: this.dueDate,
+              Status: this.isCompleted ? "Completed" : "Not Started"
+            }
+          });
+          this.getTodoList();
+          this.showToast("Edit Todo", "Todo is updated successfully.");
+        } catch (error) {
+          console.log(error);
+        } finally {
+          this.isProcessing = false;
+          this.initTodo();
         }
-      });
-      this.getTodoList();
-      this.showToast("Edit Todo", "Todo is updated successfully.");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      this.isEditClicked = false;
-      this.isProcessing = false;
+      } else {
+        try {
+          this.isProcessing = true;
+          let todo = await addTodo({
+            subject: this.subject,
+            activityDate: this.dueDate,
+            isCompleted: this.isCompleted
+          });
+          this.getTodoList();
+          this.showToast("Add Todo", "Todo is inserted successfully.");
+        } catch (error) {
+          console.log(error);
+        } finally {
+          this.isProcessing = false;
+          this.initTodo();
+        }
+      }
+    } else {
       this.initTodo();
     }
   }
