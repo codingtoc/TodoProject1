@@ -16,6 +16,7 @@ export default class TodoList extends LightningElement {
   isProcessing = false;
   searchText;
   status = "All";
+  hasSearchedTodos = false;
 
   connectedCallback() {
     this.isProcessing = true;
@@ -24,10 +25,14 @@ export default class TodoList extends LightningElement {
 
   async getTodoList() {
     try {
-      const todoList = await getTodos();
+      const todoList = await getTodos({
+        searchText: this.searchText,
+        status: this.status
+      });
       this.todos = todoList.map((todo) => {
         return { ...todo, IsCompleted: todo.Status === "Completed" };
       });
+      this.hasSearchedTodos = this.todos.length > 0;
     } catch (error) {
       console.log(error);
     } finally {

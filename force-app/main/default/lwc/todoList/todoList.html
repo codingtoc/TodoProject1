@@ -21,48 +21,56 @@
       onsearchtext={handleSearchText}
       onstatus={handleStatus}
     ></c-search-todo>
-    {searchText} - {status}
-    <template for:each={todos} for:item="todo">
-      <lightning-layout
-        key={todos.Id}
-        class="slds-box slds-m-around_small"
-        vertical-align="center"
-        horizontal-align="spread"
-      >
-        <lightning-layout-item size="8">
-          <template if:true={todo.IsCompleted}>
-            <b style="text-decoration: line-through">{todo.Subject}</b>
-          </template>
-          <template if:false={todo.IsCompleted}>
-            <b>{todo.Subject}</b>
-          </template>
-          <br />
-          <font style="font-size: xx-small">{todo.ActivityDate}</font>
-        </lightning-layout-item>
+    <template if:true={hasSearchedTodos}>
+      <template for:each={todos} for:item="todo">
+        <lightning-layout
+          key={todos.Id}
+          class="slds-box slds-m-around_small"
+          vertical-align="center"
+          horizontal-align="spread"
+        >
+          <lightning-layout-item size="8">
+            <template if:true={todo.IsCompleted}>
+              <b style="text-decoration: line-through">{todo.Subject}</b>
+            </template>
+            <template if:false={todo.IsCompleted}>
+              <b>{todo.Subject}</b>
+            </template>
+            <br />
+            <font style="font-size: xx-small">{todo.ActivityDate}</font>
+          </lightning-layout-item>
+          <lightning-layout-item>
+            <lightning-button-icon
+              icon-name="utility:edit"
+              variant="brand"
+              alternative-text="Edit"
+              title="Edit"
+              class="slds-m-left_xx-small"
+              onclick={handleModalPopup}
+              data-record-id={todo.Id}
+              data-subject={todo.Subject}
+              data-due-date={todo.ActivityDate}
+              data-is-completed={todo.IsCompleted}
+            >
+            </lightning-button-icon>
+            <lightning-button-icon
+              icon-name="utility:delete"
+              variant="brand"
+              alternative-text="Delete"
+              title="Delete"
+              class="slds-m-left_xx-small"
+              onclick={handleDelete}
+              data-record-id={todo.Id}
+            >
+            </lightning-button-icon>
+          </lightning-layout-item>
+        </lightning-layout>
+      </template>
+    </template>
+    <template if:false={hasSearchedTodos}>
+      <lightning-layout horizontal-align="center">
         <lightning-layout-item>
-          <lightning-button-icon
-            icon-name="utility:edit"
-            variant="brand"
-            alternative-text="Edit"
-            title="Edit"
-            class="slds-m-left_xx-small"
-            onclick={handleModalPopup}
-            data-record-id={todo.Id}
-            data-subject={todo.Subject}
-            data-due-date={todo.ActivityDate}
-            data-is-completed={todo.IsCompleted}
-          >
-          </lightning-button-icon>
-          <lightning-button-icon
-            icon-name="utility:delete"
-            variant="brand"
-            alternative-text="Delete"
-            title="Delete"
-            class="slds-m-left_xx-small"
-            onclick={handleDelete}
-            data-record-id={todo.Id}
-          >
-          </lightning-button-icon>
+          <b>No todos were found.</b>
         </lightning-layout-item>
       </lightning-layout>
     </template>
