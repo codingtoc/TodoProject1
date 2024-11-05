@@ -14,6 +14,8 @@ export default class TodoList extends LightningElement {
   dueDate;
   isCompleted = false;
   isProcessing = false;
+  searchText;
+  status = "All";
 
   connectedCallback() {
     this.isProcessing = true;
@@ -138,5 +140,13 @@ export default class TodoList extends LightningElement {
       message: message
     });
     this.dispatchEvent(event);
+  }
+
+  handleSearchText(event) {
+    this.searchText = event.detail;
+  }
+
+  handleStatus(event) {
+    this.status = event.detail;
   }
 }

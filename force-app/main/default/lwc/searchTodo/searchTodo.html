@@ -1,10 +1,19 @@
 <template>
   <lightning-layout class="slds-p-around_small">
     <lightning-layout-item size="8">
-      <lightning-input type="text" label="Enter Todo subject"></lightning-input>
+      <lightning-input
+        type="text"
+        label="Enter Todo subject"
+        onchange={handleSearchText}
+      ></lightning-input>
     </lightning-layout-item>
     <lightning-layout-item class="slds-m-left_large">
-      <lightning-combobox label="Select Status"></lightning-combobox>
+      <lightning-combobox
+        label="Select Status"
+        value={status}
+        options={options}
+        onchange={handleStatus}
+      ></lightning-combobox>
     </lightning-layout-item>
   </lightning-layout>
 </template>
