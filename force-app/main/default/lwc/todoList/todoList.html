@@ -17,6 +17,7 @@
       slot="actions"
       onclick={handleRefresh}
     ></lightning-button-icon>
+    <c-search-todo></c-search-todo>
     <template for:each={todos} for:item="todo">
       <lightning-layout
         key={todos.Id}
