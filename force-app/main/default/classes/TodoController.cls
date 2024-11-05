@@ -1,14 +1,67 @@
 public with sharing class TodoController {
   @AuraEnabled
-  public static List<Task> getTodos() {
+  public static List<Task> getTodos(String searchText, String status) {
     try {
-      return [
-        SELECT Id, Subject, Status, ActivityDate
-        FROM Task
-        WHERE OwnerId = :UserInfo.getUserId()
-        WITH SECURITY_ENFORCED
-        ORDER BY ActivityDate DESC NULLS LAST, CreatedDate DESC
-      ];
+      if (String.isEmpty(searchText)) {
+        if (status == 'All') {
+          return [
+            SELECT Id, Subject, Status, ActivityDate
+            FROM Task
+            WHERE OwnerId = :UserInfo.getUserId()
+            WITH SECURITY_ENFORCED
+            ORDER BY ActivityDate DESC NULLS LAST, CreatedDate DESC
+          ];
+        } else if (status == 'Open') {
+          return [
+            SELECT Id, Subject, Status, ActivityDate
+            FROM Task
+            WHERE OwnerId = :UserInfo.getUserId() AND Status != 'Completed'
+            WITH SECURITY_ENFORCED
+            ORDER BY ActivityDate DESC NULLS LAST, CreatedDate DESC
+          ];
+        } else if (status == 'Completed') {
+          return [
+            SELECT Id, Subject, Status, ActivityDate
+            FROM Task
+            WHERE OwnerId = :UserInfo.getUserId() AND Status = 'Completed'
+            WITH SECURITY_ENFORCED
+            ORDER BY ActivityDate DESC NULLS LAST, CreatedDate DESC
+          ];
+        }
+      } else {
+        searchText = '%' + searchText + '%';
+        if (status == 'All') {
+          return [
+            SELECT Id, Subject, Status, ActivityDate
+            FROM Task
+            WHERE OwnerId = :UserInfo.getUserId() AND Subject LIKE :searchText
+            WITH SECURITY_ENFORCED
+            ORDER BY ActivityDate DESC NULLS LAST, CreatedDate DESC
+          ];
+        } else if (status == 'Open') {
+          return [
+            SELECT Id, Subject, Status, ActivityDate
+            FROM Task
+            WHERE
+              OwnerId = :UserInfo.getUserId()
+              AND Status != 'Completed'
+              AND Subject LIKE :searchText
+            WITH SECURITY_ENFORCED
+            ORDER BY ActivityDate DESC NULLS LAST, CreatedDate DESC
+          ];
+        } else if (status == 'Completed') {
+          return [
+            SELECT Id, Subject, Status, ActivityDate
+            FROM Task
+            WHERE
+              OwnerId = :UserInfo.getUserId()
+              AND Status = 'Completed'
+              AND Subject LIKE :searchText
+            WITH SECURITY_ENFORCED
+            ORDER BY ActivityDate DESC NULLS LAST, CreatedDate DESC
+          ];
+        }
+      }
     } catch (Exception e) {
       System.debug(e.getMessage());
     }
