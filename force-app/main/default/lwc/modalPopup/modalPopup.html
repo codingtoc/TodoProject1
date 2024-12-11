@@ -22,6 +22,14 @@
       value={todo.dueDate}
       onchange={handleChangeDueDate}
     ></lightning-input>
+    <template if:true={isCompleted}>
+      <lightning-input
+        type="datetime"
+        label="Completed Date/Time"
+        value={todo.completedDateTime}
+        readonly
+      ></lightning-input>
+    </template>
     <lightning-input
       type="checkbox"
       label="Is Completed"

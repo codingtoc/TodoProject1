@@ -5,12 +5,14 @@ export default class ModalPopup extends LightningModal {
   @api todo = {};
   subject;
   dueDate;
+  completedDateTime;
   isCompleted = false;
 
   connectedCallback() {
     this.subject = this.todo.subject;
     this.dueDate = this.todo.dueDate;
     this.isCompleted = this.todo.isCompleted;
+    this.completedDateTime = this.todo.completedDateTime;
   }
 
   get isEditClicked() {
@@ -53,5 +55,6 @@ export default class ModalPopup extends LightningModal {
     this.subject = null;
     this.dueDate = null;
     this.isCompleted = false;
+    this.completedDateTime = null;
   }
 }

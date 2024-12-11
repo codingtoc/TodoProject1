@@ -12,6 +12,7 @@ export default class TodoList extends LightningElement {
   recordId;
   subject;
   dueDate;
+  completedDateTime;
   isCompleted = false;
   isProcessing = false;
   searchText;
@@ -50,6 +51,7 @@ export default class TodoList extends LightningElement {
     this.recordId = event.target.dataset.recordId;
     this.subject = event.target.dataset.subject;
     this.dueDate = event.target.dataset.dueDate;
+    this.completedDateTime = event.target.dataset.completedDateTime;
     this.isCompleted = event.target.dataset.isCompleted === "true";
 
     const result = await ModalPopup.open({
@@ -57,6 +59,7 @@ export default class TodoList extends LightningElement {
         recordId: this.recordId,
         subject: this.subject,
         dueDate: this.dueDate,
+        completedDateTime: this.completedDateTime,
         isCompleted: this.isCompleted
       }
     });
@@ -65,6 +68,7 @@ export default class TodoList extends LightningElement {
       this.recordId = result.recordId;
       this.subject = result.subject;
       this.dueDate = result.dueDate;
+      this.completedDateTime = result.completedDateTime;
       this.isCompleted = result.isCompleted;
       if (this.recordId) {
         try {
@@ -136,6 +140,7 @@ export default class TodoList extends LightningElement {
     this.recordId = null;
     this.subject = null;
     this.dueDate = null;
+    this.completedDateTime = null;
     this.isCompleted = false;
   }
 

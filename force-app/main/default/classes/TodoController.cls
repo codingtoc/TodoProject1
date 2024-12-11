@@ -5,7 +5,7 @@ public with sharing class TodoController {
       if (String.isEmpty(searchText)) {
         if (status == 'All') {
           return [
-            SELECT Id, Subject, Status, ActivityDate
+            SELECT Id, Subject, Status, ActivityDate, CompletedDateTime
             FROM Task
             WHERE OwnerId = :UserInfo.getUserId()
             WITH SECURITY_ENFORCED
@@ -13,7 +13,7 @@ public with sharing class TodoController {
           ];
         } else if (status == 'Open') {
           return [
-            SELECT Id, Subject, Status, ActivityDate
+            SELECT Id, Subject, Status, ActivityDate, CompletedDateTime
             FROM Task
             WHERE OwnerId = :UserInfo.getUserId() AND Status != 'Completed'
             WITH SECURITY_ENFORCED
@@ -21,7 +21,7 @@ public with sharing class TodoController {
           ];
         } else if (status == 'Completed') {
           return [
-            SELECT Id, Subject, Status, ActivityDate
+            SELECT Id, Subject, Status, ActivityDate, CompletedDateTime
             FROM Task
             WHERE OwnerId = :UserInfo.getUserId() AND Status = 'Completed'
             WITH SECURITY_ENFORCED
@@ -32,7 +32,7 @@ public with sharing class TodoController {
         searchText = '%' + searchText + '%';
         if (status == 'All') {
           return [
-            SELECT Id, Subject, Status, ActivityDate
+            SELECT Id, Subject, Status, ActivityDate, CompletedDateTime
             FROM Task
             WHERE OwnerId = :UserInfo.getUserId() AND Subject LIKE :searchText
             WITH SECURITY_ENFORCED
@@ -40,7 +40,7 @@ public with sharing class TodoController {
           ];
         } else if (status == 'Open') {
           return [
-            SELECT Id, Subject, Status, ActivityDate
+            SELECT Id, Subject, Status, ActivityDate, CompletedDateTime
             FROM Task
             WHERE
               OwnerId = :UserInfo.getUserId()
@@ -51,7 +51,7 @@ public with sharing class TodoController {
           ];
         } else if (status == 'Completed') {
           return [
-            SELECT Id, Subject, Status, ActivityDate
+            SELECT Id, Subject, Status, ActivityDate, CompletedDateTime
             FROM Task
             WHERE
               OwnerId = :UserInfo.getUserId()
